@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark Theme Palette */
+    --background: 0 0% 4%;
+    /* #0A0A0A near-black */
+    --foreground: 0 0% 98%;
+    /* #FAFAFA near-white */
+    --card: 0 0% 8%;
+    /* #141414 dark surface */
+    --card-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --popover: 0 0% 8%;
+    /* #141414 */
+    --popover-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --primary: 0 0% 98%;
+    /* #FAFAFA white - primary actions */
+    --primary-foreground: 0 0% 4%;
+    /* #0A0A0A */
+    --secondary: 0 0% 12%;
+    /* #1F1F1F dark grey */
+    --secondary-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --muted: 0 0% 10%;
+    /* #1A1A1A */
+    --muted-foreground: 0 0% 45%;
+    /* #737373 */
+    --accent: 0 0% 15%;
+    /* #262626 accent surfaces */
+    --accent-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --destructive: 0 50% 45%;
+    /* red */
+    --destructive-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --border: 0 0% 15%;
+    /* #262626 */
+    --input: 0 0% 12%;
+    /* #1F1F1F */
+    --ring: 0 0% 98%;
+    /* #FAFAFA */
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 6%;
+    /* #0F0F0F */
+    --sidebar-foreground: 0 0% 63%;
+    /* #A1A1A1 */
+    --sidebar-primary: 0 0% 98%;
+    /* #FAFAFA */
+    --sidebar-primary-foreground: 0 0% 4%;
+    /* #0A0A0A */
+    --sidebar-accent: 0 0% 15%;
+    /* #262626 */
+    --sidebar-accent-foreground: 0 0% 98%;
+    /* #FAFAFA */
+    --sidebar-border: 0 0% 15%;
+    /* #262626 */
+    --sidebar-ring: 0 0% 98%;
+    /* #FAFAFA */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
