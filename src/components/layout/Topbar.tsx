@@ -72,7 +72,9 @@ export function Topbar() {
     <header
       className={cn(
         'fixed top-0 right-0 h-14 bg-surface border-b border-surface-border z-40 flex items-center justify-between px-4 transition-all duration-300',
-        sidebarOpen ? 'left-[220px]' : 'left-0'
+        // On mobile, always take full width from left=0; on desktop offset by sidebar
+        'left-0',
+        sidebarOpen ? 'lg:left-[220px]' : 'lg:left-0'
       )}
     >
       {/* Left: Menu toggle + Search */}

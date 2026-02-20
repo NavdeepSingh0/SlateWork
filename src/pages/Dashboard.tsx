@@ -88,7 +88,7 @@ export function Dashboard() {
       />
 
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-text-primary tracking-tight">Dashboard</h1>
           <p className="text-sm text-text-muted mt-0.5">Overview of your workspace activity</p>
@@ -112,15 +112,15 @@ export function Dashboard() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {liveStats.map((stat) => (
           <StatCard key={stat.label} label={stat.label} value={stat.value} />
         ))}
       </div>
 
       {/* Filter Bar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <div className="relative">
             <select
               value={selectedWorkspace}
@@ -154,7 +154,7 @@ export function Dashboard() {
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-1 bg-surface border border-surface-border rounded-md p-1">
+        <div className="flex items-center gap-1 bg-surface border border-surface-border rounded-md p-1 w-fit">
           <button onClick={() => setViewMode('list')} className={cn('p-1.5 rounded transition-colors', viewMode === 'list' ? 'text-text-primary bg-surface-border' : 'text-text-muted hover:text-text-primary')}>
             <List className="w-4 h-4" />
           </button>
@@ -170,8 +170,25 @@ export function Dashboard() {
           <p className="text-text-muted text-sm">No articles found</p>
         </div>
       ) : viewMode === 'list' ? (
+        // On mobile show cards, on desktop show table
         <div className="bg-surface border border-surface-border rounded-lg overflow-hidden">
-          <table className="w-full">
+          {/* Mobile card view */}
+          <div className="sm:hidden divide-y divide-surface-border">
+            {filteredArticles.map((article) => (
+              <Link key={article.id} to={`/articles/${article.id}`} className="block p-4 hover:bg-surface-hover transition-colors">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <p className="text-sm font-medium text-text-primary">{article.title}</p>
+                  <StatusBadge status={article.status} />
+                </div>
+                <div className="flex items-center justify-between text-xs text-text-muted">
+                  <span>{article.author.fullName}</span>
+                  <span>{formatDate(article.updatedAt)}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {/* Desktop table view */}
+          <table className="w-full hidden sm:table">
             <thead>
               <tr className="bg-surface-hover">
                 <th className="px-4 py-3 text-left text-[11px] uppercase font-semibold text-text-muted tracking-[0.06em]">Title</th>
@@ -202,7 +219,7 @@ export function Dashboard() {
           </table>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredArticles.map((article) => (
             <Link key={article.id} to={`/articles/${article.id}`} className="bg-surface border border-surface-border rounded-lg p-5 hover:border-text-muted transition-colors group">
               <div className="flex items-start justify-between mb-3">

@@ -259,7 +259,7 @@ export function ArticleView() {
   return (
     <div className="space-y-6">
       {/* Top Navigation Bar */}
-      <div className="fixed top-14 left-[220px] right-0 h-14 bg-surface border-b border-surface-border flex items-center justify-between px-8 z-30">
+      <div className="fixed top-14 left-0 lg:left-[220px] right-0 h-14 bg-surface border-b border-surface-border flex items-center justify-between px-4 sm:px-8 z-30">
         <div className="flex items-center gap-3">
           <Link
             to="/"
@@ -353,9 +353,9 @@ export function ArticleView() {
             className="h-9 px-4 bg-surface border border-surface-border rounded-md text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary transition-colors flex items-center gap-2"
           >
             <Share className="w-4 h-4" />
-            Share
+            <span className="hidden sm:inline">Share</span>
           </button>
-          <button className="h-9 w-9 flex items-center justify-center bg-surface border border-surface-border rounded-md text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors">
+          <button className="h-9 w-9 hidden sm:flex items-center justify-center bg-surface border border-surface-border rounded-md text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors">
             <MoreHorizontal className="w-4 h-4" />
           </button>
         </div>
@@ -363,10 +363,10 @@ export function ArticleView() {
 
       {/* Content Area */}
       <div className="pt-14">
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Column - Article Content */}
-          <div className="flex-1 max-w-[68%]">
-            <div className="bg-surface border border-surface-border rounded-lg p-8">
+          <div className="flex-1 lg:max-w-[68%]">
+            <div className="bg-surface border border-surface-border rounded-lg p-4 sm:p-8">
               {/* Breadcrumb */}
               <div className="text-xs text-text-muted mb-4">
                 {workspace?.name} / Articles
@@ -408,8 +408,8 @@ export function ArticleView() {
           </div>
 
           {/* Right Column - Metadata */}
-          <div className="w-[32%] min-w-[280px]">
-            <div className="bg-surface border border-surface-border rounded-lg p-6 sticky top-24">
+          <div className="w-full lg:w-[32%] lg:min-w-[280px]">
+            <div className="bg-surface border border-surface-border rounded-lg p-6 lg:sticky lg:top-24">
               {/* Status */}
               <div className="mb-6">
                 <p className="text-[10px] uppercase tracking-[0.08em] text-text-muted font-medium mb-2">

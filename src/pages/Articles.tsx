@@ -78,7 +78,7 @@ export function ArticlesPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-text-primary tracking-tight">All Articles</h1>
           <p className="text-sm text-text-muted mt-0.5">
@@ -87,7 +87,7 @@ export function ArticlesPage() {
         </div>
         <button
           onClick={() => setShowNewModal(true)}
-          className="h-9 px-4 bg-white rounded-md text-sm font-medium text-black hover:bg-white/90 transition-colors flex items-center gap-2"
+          className="h-9 px-4 bg-white rounded-md text-sm font-medium text-black hover:bg-white/90 transition-colors flex items-center gap-2 w-fit"
         >
           <Plus className="w-4 h-4" />
           New Article
@@ -95,8 +95,8 @@ export function ArticlesPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           <div className="relative">
             <select
               value={selectedWorkspace}
@@ -126,7 +126,7 @@ export function ArticlesPage() {
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-1 bg-surface border border-surface-border rounded-md p-1">
+        <div className="flex items-center gap-1 bg-surface border border-surface-border rounded-md p-1 w-fit">
           <button onClick={() => setViewMode('list')} className={cn('p-1.5 rounded transition-colors', viewMode === 'list' ? 'text-text-primary bg-surface-border' : 'text-text-muted hover:text-text-primary')}>
             <List className="w-4 h-4" />
           </button>
@@ -144,7 +144,23 @@ export function ArticlesPage() {
         </div>
       ) : viewMode === 'list' ? (
         <div className="bg-surface border border-surface-border rounded-lg overflow-hidden">
-          <table className="w-full">
+          {/* Mobile cards */}
+          <div className="sm:hidden divide-y divide-surface-border">
+            {filteredArticles.map((article) => (
+              <Link key={article.id} to={`/articles/${article.id}`} className="block p-4 hover:bg-surface-hover transition-colors">
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <p className="text-sm font-medium text-text-primary">{article.title}</p>
+                  <StatusBadge status={article.status} />
+                </div>
+                <div className="flex items-center justify-between text-xs text-text-muted mt-1">
+                  <span>{article.author.fullName}</span>
+                  <span>{formatDate(article.updatedAt)}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          {/* Desktop table */}
+          <table className="w-full hidden sm:table">
             <thead>
               <tr className="bg-surface-hover">
                 <th className="px-4 py-3 text-left text-[11px] uppercase font-semibold text-text-muted tracking-[0.06em]">Title</th>
@@ -188,7 +204,7 @@ export function ArticlesPage() {
           </table>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredArticles.map((article) => (
             <Link key={article.id} to={`/articles/${article.id}`} className="bg-surface border border-surface-border rounded-lg p-5 hover:border-text-muted transition-colors group">
               <div className="flex items-start justify-between mb-3"><StatusBadge status={article.status} /></div>
