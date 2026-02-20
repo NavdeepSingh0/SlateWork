@@ -28,6 +28,7 @@ export function ArticleView() {
   const [isEditingMode, setIsEditingMode] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedContent, setEditedContent] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     if (article) {
@@ -198,43 +199,42 @@ export function ArticleView() {
     return elements;
   };
 
-  const handleShare = async () => {
+  const handleShare = () => {
+    setShowShareModal(true);
+  };
+
+  const downloadMd = () => {
     if (!article) return;
-
     const fileName = `${article.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.md`;
-    const file = new File([article.content], fileName, { type: 'text/markdown' });
+    const blob = new Blob([article.content], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
-    const shareData = {
-      title: article.title,
-      text: `Let's discuss this article: ${article.title}`,
-      files: [file]
-    };
+  const shareViaWhatsApp = () => {
+    if (!article) return;
+    const text = encodeURIComponent(`📄 *${article.title}*\n\n${article.content.substring(0, 500)}${article.content.length > 500 ? '...' : ''}`);
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  };
 
-    const triggerDownloadFallback = () => {
-      const url = URL.createObjectURL(file);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      window.alert(`The system share API is unavailable on this device/browser combination. We have downloaded the article as '${fileName}' instead. You can now attach it manually to an email or message!`);
-    };
+  const shareViaGmail = () => {
+    if (!article) return;
+    const subject = encodeURIComponent(article.title);
+    const body = encodeURIComponent(`${article.title}\n\n${article.content}`);
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${body}`, '_blank');
+  };
 
-    try {
-      if (navigator.canShare && navigator.canShare(shareData)) {
-        await navigator.share(shareData);
-      } else {
-        triggerDownloadFallback();
-      }
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        console.error('Error sharing:', err);
-        // Fallback if the share API fails for some unexpected network/permission reason
-        triggerDownloadFallback();
-      }
-    }
+  const shareViaEmail = () => {
+    if (!article) return;
+    const subject = encodeURIComponent(article.title);
+    const body = encodeURIComponent(`${article.title}\n\n${article.content}`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
 
   const renderDiff = () => {
@@ -595,6 +595,95 @@ export function ArticleView() {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal */}
+      {showShareModal && article && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={() => setShowShareModal(false)}>
+          <div className="bg-surface border border-surface-border rounded-xl shadow-2xl w-full max-w-sm p-6" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="text-base font-semibold text-text-primary">Share Article</h2>
+                <p className="text-xs text-text-muted mt-0.5 truncate max-w-[200px]">{article.title}</p>
+              </div>
+              <button onClick={() => setShowShareModal(false)} className="p-1 text-text-muted hover:text-text-primary transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Share Options */}
+            <div className="space-y-2">
+              {/* WhatsApp */}
+              <button
+                onClick={() => { shareViaWhatsApp(); setShowShareModal(false); }}
+                className="w-full flex items-center gap-4 p-4 rounded-lg border border-surface-border hover:bg-surface-hover transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#25D366' }}>
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M11.999 2.001C6.478 2.001 2.001 6.478 2.001 12c0 1.762.461 3.413 1.263 4.849L2 22l5.293-1.225A9.932 9.932 0 0012 21.999c5.521 0 9.998-4.477 9.998-9.999C21.998 6.479 17.521 2.001 12 2.001zM12 20.001a8.03 8.03 0 01-4.094-1.124l-.293-.175-3.14.727.764-3.039-.192-.31A7.955 7.955 0 014 12.001C4 7.582 7.582 4 12 4c4.418 0 8 3.582 8 8.001 0 4.417-3.582 7.999-8 8z" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-text-primary">WhatsApp</p>
+                  <p className="text-xs text-text-muted">Share article content in a chat</p>
+                </div>
+              </button>
+
+              {/* Gmail */}
+              <button
+                onClick={() => { shareViaGmail(); setShowShareModal(false); }}
+                className="w-full flex items-center gap-4 p-4 rounded-lg border border-surface-border hover:bg-surface-hover transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-white">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.074 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.910 1.528-1.145C21.69 2.28 24 3.382 24 5.457z" fill="#EA4335" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-text-primary">Gmail</p>
+                  <p className="text-xs text-text-muted">Open Gmail compose with content</p>
+                </div>
+              </button>
+
+              {/* Email */}
+              <button
+                onClick={() => { shareViaEmail(); setShowShareModal(false); }}
+                className="w-full flex items-center gap-4 p-4 rounded-lg border border-surface-border hover:bg-surface-hover transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-surface-border flex items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-text-muted" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-text-primary">Email</p>
+                  <p className="text-xs text-text-muted">Open your default mail app</p>
+                </div>
+              </button>
+
+              {/* Divider */}
+              <div className="border-t border-surface-border my-2" />
+
+              {/* Download .md */}
+              <button
+                onClick={() => { downloadMd(); setShowShareModal(false); }}
+                className="w-full flex items-center gap-4 p-4 rounded-lg border border-surface-border hover:bg-surface-hover transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-full bg-surface-border flex items-center justify-center flex-shrink-0">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-text-muted" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-medium text-text-primary">Download as .md</p>
+                  <p className="text-xs text-text-muted">Save and attach to any message</p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
