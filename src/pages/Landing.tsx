@@ -184,12 +184,6 @@ export function LandingPage() {
                 <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-white/[0.04] blur-[120px] rounded-full pointer-events-none"></div>
 
                 <div className="max-w-4xl mx-auto z-10">
-                    <Reveal>
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm font-medium text-[#B3B3B3] mb-8">
-                            <span className="flex h-2 w-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>
-                            SlateWork is now available // Sign up today
-                        </div>
-                    </Reveal>
 
                     <Reveal delay={100}>
                         <h1 className="text-5xl md:text-7xl lg:text-[80px] font-extrabold tracking-tighter leading-[1.05] mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/40">
