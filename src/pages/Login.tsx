@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { useAuth } from '@/store/AuthContext';
 import { Navigate, useSearchParams } from 'react-router-dom';
-import { CheckCircle, Layers, FileText, Search, History } from 'lucide-react';
+import { CheckCircle, Layers, FileText, Search, History, Users } from 'lucide-react';
 
 const features = [
     { icon: FileText, text: 'Rich Markdown article editor' },
     { icon: CheckCircle, text: 'Approval workflow with roles' },
     { icon: Search, text: 'Full-text search across everything' },
     { icon: History, text: 'Version history & diff viewer' },
+];
+
+const stats = [
+    { value: '10k+', label: 'Articles' },
+    { value: '500+', label: 'Teams' },
+    { value: '99.9%', label: 'Uptime' },
 ];
 
 export function LoginPage() {
@@ -62,74 +68,88 @@ export function LoginPage() {
 
     return (
         <div className="min-h-screen flex">
-            {/* ── Left panel — brand & feature showcase ── */}
-            <div className="hidden lg:flex lg:w-1/2 bg-black flex-col justify-between p-12 relative overflow-hidden">
-                {/* Background grid */}
+
+            {/* ── LEFT PANEL ── */}
+            <div className="hidden lg:flex lg:w-1/2 bg-black flex-col justify-between p-14 relative overflow-hidden">
+                {/* Grid background */}
                 <div
-                    className="absolute inset-0 opacity-20"
+                    className="absolute inset-0 opacity-[0.15]"
                     style={{
-                        backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
-                                          linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)`,
+                        backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+                                          linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)`,
                         backgroundSize: '40px 40px',
                     }}
                 />
-                {/* Glow blob */}
-                <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-white/[0.04] blur-[120px] rounded-full pointer-events-none" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-white/[0.03] blur-[100px] rounded-full pointer-events-none" />
+                {/* Glow blobs */}
+                <div className="absolute top-[-5%] left-[-5%] w-[600px] h-[600px] bg-white/[0.05] blur-[130px] rounded-full pointer-events-none" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-white/[0.03] blur-[110px] rounded-full pointer-events-none" />
 
-                {/* Logo */}
+                {/* Logo — bigger */}
                 <div className="relative z-10 flex items-center gap-3">
-                    <div className="w-9 h-9 bg-white rounded-md flex items-center justify-center shadow-lg">
-                        <Layers className="w-5 h-5 text-black" />
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-xl shadow-white/10">
+                        <Layers className="w-7 h-7 text-black" />
                     </div>
-                    <span className="text-white font-bold text-xl tracking-tight">SlateWork</span>
+                    <span className="text-white font-bold text-2xl tracking-tight">SlateWork</span>
                 </div>
 
-                {/* Centre text */}
-                <div className="relative z-10 flex-1 flex flex-col justify-center py-12">
-                    <h1 className="text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
+                {/* Centre content */}
+                <div className="relative z-10 flex-1 flex flex-col justify-center py-10">
+                    <h1 className="text-4xl xl:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5">
                         The centralized hub<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/70 to-white/40">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/70 to-white/30">
                             for your team's knowledge.
                         </span>
                     </h1>
                     <p className="text-[#A3A3A3] text-base font-medium mb-10 leading-relaxed max-w-sm">
-                        Unify documentation, discussions, and decisions — all in one place, with real-time collaboration.
+                        Unify documentation, discussions, and decisions — all in one place, with real-time collaboration and role-based access.
                     </p>
 
                     {/* Feature list */}
-                    <ul className="space-y-4">
+                    <ul className="space-y-3">
                         {features.map(({ icon: Icon, text }) => (
-                            <li key={text} className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-md bg-white/10 border border-white/10 flex items-center justify-center flex-shrink-0">
+                            <li key={text} className="flex items-center gap-3.5">
+                                <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
                                     <Icon className="w-4 h-4 text-white" />
                                 </div>
                                 <span className="text-sm text-[#C9C9C9] font-medium">{text}</span>
                             </li>
                         ))}
                     </ul>
+
+                    {/* Stats row */}
+                    <div className="flex gap-6 mt-10 pt-8 border-t border-white/10">
+                        {stats.map(({ value, label }) => (
+                            <div key={label}>
+                                <p className="text-2xl font-black text-white tracking-tight">{value}</p>
+                                <p className="text-xs text-[#666] uppercase tracking-widest font-semibold mt-0.5">{label}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Bottom quote */}
                 <div className="relative z-10 border-t border-white/10 pt-6">
                     <p className="text-sm text-[#888] italic leading-relaxed">
-                        "SlateWork transformed how we share knowledge and collaborate."
+                        "SlateWork transformed how we share knowledge and collaborate across engineering."
                     </p>
-                    <p className="text-xs text-[#555] mt-2 font-semibold uppercase tracking-wider">— Sarah Chen, VP Engineering</p>
+                    <p className="text-xs text-[#555] mt-2 font-semibold uppercase tracking-wider">— Sarah Chen, VP Engineering · ACME Corp</p>
                 </div>
             </div>
 
-            {/* ── Right panel — form ── */}
-            <div className="flex-1 bg-background flex flex-col items-center justify-center p-6 sm:p-12">
+            {/* ── RIGHT PANEL ── */}
+            <div className="flex-1 bg-background flex flex-col items-center justify-center p-6 sm:p-12 relative overflow-hidden">
+                {/* Subtle right-side glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/[0.015] blur-[120px] rounded-full pointer-events-none" />
+
                 {/* Mobile logo */}
-                <div className="lg:hidden flex items-center gap-2 mb-10">
-                    <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
-                        <Layers className="w-4 h-4 text-black" />
+                <div className="lg:hidden flex items-center gap-2 mb-10 relative z-10">
+                    <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center">
+                        <Layers className="w-5 h-5 text-black" />
                     </div>
-                    <span className="text-text-primary font-bold text-lg tracking-tight">SlateWork</span>
+                    <span className="text-text-primary font-bold text-xl tracking-tight">SlateWork</span>
                 </div>
 
-                <div className="w-full max-w-sm">
+                <div className="w-full max-w-sm relative z-10">
                     {confirmationSent ? (
                         <div className="bg-surface border border-surface-border rounded-xl p-8 text-center">
                             <div className="w-12 h-12 bg-status-published-bg rounded-full flex items-center justify-center mx-auto mb-4">
@@ -155,7 +175,7 @@ export function LoginPage() {
                                 <h2 className="text-2xl font-bold text-text-primary tracking-tight">
                                     {isSignUp ? 'Create your account' : 'Welcome back'}
                                 </h2>
-                                <p className="text-text-muted text-sm mt-1">
+                                <p className="text-text-muted text-sm mt-1.5">
                                     {isSignUp
                                         ? 'Start collaborating with your team today.'
                                         : 'Sign in to continue to SlateWork.'}
@@ -172,7 +192,7 @@ export function LoginPage() {
                                             value={fullName}
                                             onChange={(e) => setFullName(e.target.value)}
                                             placeholder="Alex Morgan"
-                                            className="w-full h-11 px-3 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
+                                            className="w-full h-11 px-3.5 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
                                             required
                                         />
                                     </div>
@@ -185,7 +205,7 @@ export function LoginPage() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="you@example.com"
-                                        className="w-full h-11 px-3 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
+                                        className="w-full h-11 px-3.5 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
                                         required
                                     />
                                 </div>
@@ -197,14 +217,14 @@ export function LoginPage() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••"
-                                        className="w-full h-11 px-3 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
+                                        className="w-full h-11 px-3.5 bg-surface border border-surface-border rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-text-muted transition-colors"
                                         required
                                         minLength={6}
                                     />
                                 </div>
 
                                 {error && (
-                                    <div className="px-3 py-2.5 bg-status-error-bg border border-status-error-text/20 rounded-lg">
+                                    <div className="px-3.5 py-2.5 bg-status-error-bg border border-status-error-text/20 rounded-lg">
                                         <p className="text-sm text-status-error-text">{error}</p>
                                     </div>
                                 )}
@@ -223,7 +243,7 @@ export function LoginPage() {
                             </form>
 
                             {/* Toggle */}
-                            <p className="text-center text-sm text-text-muted mt-6">
+                            <p className="text-center text-sm text-text-muted mt-5">
                                 {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
                                 <button
                                     onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
@@ -232,6 +252,38 @@ export function LoginPage() {
                                     {isSignUp ? 'Sign in' : 'Sign up'}
                                 </button>
                             </p>
+
+                            {/* Social proof chips */}
+                            <div className="mt-10 pt-8 border-t border-surface-border">
+                                <div className="flex items-center justify-center gap-1.5 mb-4">
+                                    <div className="flex -space-x-2">
+                                        {['A', 'R', 'S', 'M'].map((initial, i) => (
+                                            <div
+                                                key={i}
+                                                className="w-7 h-7 rounded-full bg-surface border-2 border-background flex items-center justify-center text-[10px] font-bold text-text-secondary"
+                                                style={{ zIndex: 4 - i }}
+                                            >
+                                                {initial}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-xs text-text-muted ml-2 font-medium">
+                                        Joined by <span className="text-text-secondary font-semibold">500+ teams</span> worldwide
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {[
+                                        { icon: FileText, label: '10k+ Articles' },
+                                        { icon: Users, label: '500+ Teams' },
+                                        { icon: CheckCircle, label: 'Free to start' },
+                                    ].map(({ icon: Icon, label }) => (
+                                        <div key={label} className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-surface border border-surface-border">
+                                            <Icon className="w-4 h-4 text-text-muted" />
+                                            <span className="text-[11px] text-text-muted text-center font-medium leading-tight">{label}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </>
                     )}
                 </div>
