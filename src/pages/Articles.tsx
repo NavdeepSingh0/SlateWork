@@ -22,7 +22,7 @@ export function ArticlesPage() {
   const [showNewModal, setShowNewModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
-  const [newWorkspace, setNewWorkspace] = useState('1');
+  const [newWorkspace, setNewWorkspace] = useState('');
   const [newTags, setNewTags] = useState<string[]>([]);
   const [newStatus, setNewStatus] = useState<ArticleStatus>('draft');
 
@@ -58,19 +58,28 @@ export function ArticlesPage() {
     return `${Math.floor(diffInDays / 30)} months ago`;
   };
 
+  // Set initial workspace to first available when workspaces load
+  useEffect(() => {
+    if (workspaces.length > 0 && !newWorkspace) {
+      setNewWorkspace(workspaces[0].id);
+    }
+  }, [workspaces, newWorkspace]);
+
   const handleCreateArticle = () => {
     if (!newTitle.trim()) return;
+    const wsId = newWorkspace || (workspaces.length > 0 ? workspaces[0].id : '');
+    if (!wsId) return;
     addArticle({
       title: newTitle,
       content: newContent || `# ${newTitle}\n\nStart writing here...`,
-      workspaceId: newWorkspace,
+      workspaceId: wsId,
       status: newStatus,
       tags: allTags.filter(t => newTags.includes(t.id)),
     });
     setShowNewModal(false);
     setNewTitle('');
     setNewContent('');
-    setNewWorkspace('1');
+    setNewWorkspace(workspaces.length > 0 ? workspaces[0].id : '');
     setNewTags([]);
     setNewStatus('draft');
   };
